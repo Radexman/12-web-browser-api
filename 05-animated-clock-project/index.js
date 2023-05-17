@@ -1,4 +1,13 @@
 // ================== 06 Animated Clock Project ================== //
+const canvas = document.getElementById('canvas');
+
+// Form inputs
+const faceColor = document.getElementById('face-color');
+const borderColor = document.getElementById('border-color');
+const lineColor = document.getElementById('line-color');
+const largeHandsColor = document.getElementById('large-hands-color');
+const secondHandColor = document.getElementById('second-hand-color');
+const saveBtn = document.getElementById('save-btn');
 
 const clock = () => {
 	const now = new Date();
@@ -21,7 +30,8 @@ const clock = () => {
 	ctx.save();
 	ctx.beginPath();
 	ctx.lineWidth = 14;
-	ctx.strokeStyle = '#800000';
+	ctx.fillStyle = faceColor.value;
+	ctx.strokeStyle = borderColor.value;
 	ctx.arc(0, 0, 142, 0, Math.PI * 2, true);
 	ctx.stroke();
 	ctx.fill();
@@ -29,6 +39,7 @@ const clock = () => {
 
 	// Draw hour lines
 	ctx.save();
+	ctx.strokeStyle = lineColor.value;
 	for (let i = 0; i < 12; i++) {
 		ctx.beginPath();
 		ctx.rotate(Math.PI / 6);
@@ -41,6 +52,7 @@ const clock = () => {
 	// Draw minute lines
 	ctx.save();
 	ctx.lineWidth = 4;
+	ctx.strokeStyle = lineColor.value;
 	for (let i = 0; i < 60; i++) {
 		if (i % 5 !== 0) {
 			ctx.beginPath();
@@ -61,7 +73,7 @@ const clock = () => {
 	// Draw hour hand
 	ctx.save();
 	ctx.rotate((Math.PI / 6) * hour + (Math.PI / 360) * min + (Math.PI / 21600) * sec);
-	ctx.strokeStyle = '#800000';
+	ctx.strokeStyle = largeHandsColor.value;
 	ctx.lineWidth = 14;
 	ctx.beginPath();
 	ctx.moveTo(-20, 0);
@@ -72,7 +84,7 @@ const clock = () => {
 	// Draw minute hand
 	ctx.save();
 	ctx.rotate((Math.PI / 30) * min + (Math.PI / 1800) * sec);
-	ctx.strokeStyle = '#800000';
+	ctx.strokeStyle = largeHandsColor.value;
 	ctx.lineWidth = 10;
 	ctx.beginPath();
 	ctx.moveTo(-28, 0);
@@ -83,8 +95,8 @@ const clock = () => {
 	// Draw second hand
 	ctx.save();
 	ctx.rotate((sec * Math.PI) / 30);
-	ctx.strokeStyle = '#ff7f50';
-	ctx.fillStyle = '#ff7f50';
+	ctx.strokeStyle = secondHandColor.value;
+	ctx.fillStyle = secondHandColor.value;
 	ctx.lineWidth = 6;
 	ctx.beginPath();
 	ctx.moveTo(-30, 0);
@@ -101,3 +113,11 @@ const clock = () => {
 };
 
 requestAnimationFrame(clock);
+
+saveBtn.addEventListener('click', () => {
+	const dataURL = canvas.toDataURL('image/png');
+	const link = document.createElement('a');
+	link.download = 'clock.png';
+	link.href = dataURL;
+	link.click();
+});
